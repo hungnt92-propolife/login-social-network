@@ -16,7 +16,7 @@ class LoginSocialNetwork extends Controller
      * @param  mixed $socialType
      * @return void
      */
-    public function getUserInfoByToken($accessToken, $socialType)
+    public static function getUserInfoByToken($accessToken, $socialType)
     {
         try {
             $data = Socialite::driver($socialType);
