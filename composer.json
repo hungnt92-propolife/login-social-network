@@ -1,0 +1,12 @@
+{
+    "name": "hung/login-social-network",
+    "description": "Login Social Network",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Hung Nguyen",
+            "email": "nguyenhungit.92@gmail.com"
+        }
+    ],
+    "require": {}
+}
