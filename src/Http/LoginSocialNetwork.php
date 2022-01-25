@@ -1,11 +1,12 @@
 <?php 
 namespace HungNguyen\LoginSocialNetwork\Http;
 
+use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
-trait LoginSocialNetwork
+class LoginSocialNetwork extends Controller
 {
         
     /**
@@ -15,7 +16,7 @@ trait LoginSocialNetwork
      * @param  mixed $socialType
      * @return void
      */
-    public function getUserInfoByToken($accessToken, $socialType)
+    public static function getUserInfoByToken($accessToken, $socialType)
     {
         try {
             $data = Socialite::driver($socialType);
