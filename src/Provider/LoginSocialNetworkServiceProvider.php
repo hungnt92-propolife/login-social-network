@@ -2,7 +2,6 @@
 
 namespace HungNguyen\LoginSocialNetwork\Provider;
 
-use HungNguyen\LoginSocialNetwork\Commands\MigrationCommandSocialNetwork;
 use Illuminate\Support\ServiceProvider;
 
 class LoginSocialNetworkServiceProvider extends ServiceProvider
@@ -14,9 +13,7 @@ class LoginSocialNetworkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->runningInConsole()) {
-            $this->registerConsoleCommands();
-        }
+        //
     }
 
     /**
@@ -27,9 +24,5 @@ class LoginSocialNetworkServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-    }
-
-    private function registerConsoleCommands() {
-        $this->commands(MigrationCommandSocialNetwork::class);
     }
 }
