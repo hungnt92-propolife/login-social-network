@@ -1,22 +1,47 @@
-<?php 
+<?php
+
 namespace HungNguyen\LoginSocialNetwork\Http;
 
-use App\Http\Controllers\Controller;
 use Exception;
+use App\Http\Controllers\Controller;
+use HungNguyen\LoginSocialNetwork\Repository\SocialNetwork;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
-class LoginSocialNetwork extends Controller
+class LoginSocialNetwork extends Controller implements SocialNetwork
 {
-        
+
     /**
-     * getUserInfoByToken
+     * userInfo function
      *
-     * @param  mixed $accessToken
-     * @param  mixed $socialType
+     * @param Request $request
      * @return void
      */
-    public static function getUserInfoByToken($accessToken, $socialType)
+    public function userInfo(Request $request)
+    {
+
+        $accessToken = $request->get('access_token');
+        $socialType = $request->get('social_type');
+        if (!$accessToken) {
+            return "Access token is required";
+        }
+
+        if (!$socialType) {
+            return "Social type is required";
+        }
+
+        return $this->getUserInfoByToken($accessToken, $socialType);
+    }
+
+    /**
+     * getUserInfoByToken function
+     *
+     * @param string $accessToken
+     * @param string $socialType
+     * @return void
+     */
+    public function getUserInfoByToken(string $accessToken, string $socialType)
     {
         try {
             $data = Socialite::driver($socialType);
@@ -27,6 +52,7 @@ class LoginSocialNetwork extends Controller
             return $user;
         } catch (Exception $e) {
             Log::error($e->getMessage());
+            return $e->getMessage();
         }
     }
 }
