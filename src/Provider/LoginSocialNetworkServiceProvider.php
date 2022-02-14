@@ -2,9 +2,6 @@
 
 namespace HungNguyen\LoginSocialNetwork\Provider;
 
-use Exception;
-use HungNguyen\LoginSocialNetwork\Commands\MigrationCommandSocialNetwork;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class LoginSocialNetworkServiceProvider extends ServiceProvider
@@ -16,9 +13,6 @@ class LoginSocialNetworkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->runningInConsole()) {
-            $this->registerConsoleCommands();
-        }
     }
 
     /**
@@ -28,10 +22,6 @@ class LoginSocialNetworkServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/../../routes/hungnt.php');
-    }
-
-    private function registerConsoleCommands() {
-        $this->commands(MigrationCommandSocialNetwork::class);
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/hungnt.php');
     }
 }

@@ -2,57 +2,46 @@
 
 namespace HungNguyen\LoginSocialNetwork\Http;
 
-use Exception;
 use App\Http\Controllers\Controller;
-use HungNguyen\LoginSocialNetwork\Repository\SocialNetwork;
+use HungNguyen\LoginSocialNetwork\Repository\SocialNetworkRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Http\Response;
 
-class LoginSocialNetwork extends Controller implements SocialNetwork
+class LoginSocialNetwork extends Controller
 {
 
+    protected $socialNetwork;
+
+    public function __construct(SocialNetworkRepository $socialNetworkRepository)
+    {
+        $this->socialNetwork = $socialNetworkRepository;
+    }
+
     /**
-     * userInfo function
+     * getUserInfo function
      *
      * @param Request $request
      * @return void
      */
-    public function userInfo(Request $request)
+    public function getUserInfo(Request $request)
     {
 
         $accessToken = $request->get('access_token');
         $socialType = $request->get('social_type');
         if (!$accessToken) {
-            return "Access token is required";
+            return response()->json(['messages' => 'Access token is required'], Response::HTTP_BAD_REQUEST);
         }
 
         if (!$socialType) {
-            return "Social type is required";
+            return response()->json(['messages' => 'Social type is required'], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->getUserInfoByToken($accessToken, $socialType);
-    }
+        $user = $this->socialNetwork->getUserByToken($accessToken, $socialType);
 
-    /**
-     * getUserInfoByToken function
-     *
-     * @param string $accessToken
-     * @param string $socialType
-     * @return void
-     */
-    public function getUserInfoByToken(string $accessToken, string $socialType)
-    {
-        try {
-            $data = Socialite::driver($socialType);
-            $user = [];
-            if ($data->userFromToken($accessToken)) {
-                $user = $data->userFromToken($accessToken);
-            }
-            return $user;
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            return $e->getMessage();
+        if ($user) {
+            return response()->json(['data' => $user], Response::HTTP_OK);
         }
+
+        return response()->json(['messages' => 'User or driver not found'], Response::HTTP_NOT_FOUND);
     }
 }
